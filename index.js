@@ -16,12 +16,21 @@ async function run(){
     try{
         await client.connect();
         const purchasesCollection = client.db('manufacturer_website').collection('purchases');
+        const clickPurchasesCollection = client.db('manufacturer_website').collection('clickPurchases');
+
+        // Api Naming Conevntion //
 
         app.get('/purchase', async(req,res) => {
             const query = {};
             const cursor = purchasesCollection.find(query);
             const purchases = await cursor.toArray();
             res.send(purchases); 
+        })
+
+        app.post('/clickPurchase', async(req,res) => {
+            const clickPurchase = req.body;
+            const result = await clickPurchasesCollection.insertOne(clickPurchase);
+            res.send(result);
         })
 
     }
