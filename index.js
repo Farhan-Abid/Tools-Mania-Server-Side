@@ -105,6 +105,8 @@ async function run(){
             res.send({ result, token });
           });
 
+          //get method usage to show data
+
         app.get("/clickPurchase", verifyJwt, async (req, res) => {
             const customer = req.query.customer;
       
