@@ -50,7 +50,7 @@ async function run(){
               res.status(403).send({ message: "Forbidden" });
             }
           };
-
+// get method usage 
 
         app.get('/purchase', async(req,res) => {
             const query = {};
