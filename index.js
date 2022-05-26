@@ -3,6 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
+const jwt = require("jsonwebtoken");
 const port = process.env.PORT || 5000;
 
 app.use(cors());
@@ -32,7 +33,7 @@ async function run(){
         await client.connect();
         const purchasesCollection = client.db('manufacturer_website').collection('purchases');
         const clickPurchasesCollection = client.db('manufacturer_website').collection('clickPurchases');
-        const userCollection = client.db("manufacturer").collection("users");
+        const userCollection = client.db("manufacturer_website").collection("users");
 
         const verifyAdmin = async (req, res, next) => {
             const requester = req.decoded.email;
@@ -99,12 +100,6 @@ async function run(){
             res.send({ result, token });
           });
 
-        // app.post('/clickPurchase', async(req,res) => {
-        //     const clickPurchase = req.body;
-        //     const result = await clickPurchasesCollection.insertOne(clickPurchase);
-        //     res.send(result);
-        // })
-
         app.get("/clickPurchase", verifyJwt, async (req, res) => {
             const customer = req.query.customer;
       
@@ -112,7 +107,7 @@ async function run(){
             const decodedEmail = req.decoded.email;
             if (customer === decodedEmail) {
               const query = { customer: customer };
-              const bookings = await bookingCollection.find(query).toArray();
+              const bookings = await clickPurchasesCollection.find(query).toArray();
               return res.send(bookings);
             } else {
               return res.status(403).send({ message: "Forbidden access" });
@@ -122,7 +117,7 @@ async function run(){
           app.post("/clickPurchase", async (req, res) => {
             const booking = req.body;
       
-            const result = await bookingCollection.insertOne(booking);
+            const result = await clickPurchasesCollection.insertOne(booking);
             res.send({ success: true, result });
           });
 
