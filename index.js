@@ -6,7 +6,7 @@ const app = express();
 const jwt = require("jsonwebtoken");
 const port = process.env.PORT || 5000;
 
-app.use(cors({ origin : "https://manufacturer-website-cli-78254.web.app/" }))
+app.use(cors({ origin : "https://manufacturer-website-cli-78254.web.app" }))
 app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ivt5b.mongodb.net/?retryWrites=true&w=majority`;
